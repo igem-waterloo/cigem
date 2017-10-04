@@ -2,10 +2,13 @@
 
 CiGEM is a collaborative effort between the University of Toronto and University of Waterloo iGEM teams to create a CI server for iGEM wikis.
 
+You can check it out here:
+
+https://cigem-181114.appspot.com/
+
 * [Setup](#setup)
 * [Running locally](#running-locally)
 * [Deploying to App Engine](#deploying-to-app-engine)
-* [Running the tests](#running-the-tests)
 
 ## Setup
 
@@ -43,9 +46,3 @@ or with `yarn`:
 
     yarn run deploy
 
-## Running the tests
-
-[appengine]: https://cloud.google.com/appengine/docs/flexible/nodejs
-[tutorial]: https://cloud.google.com/appengine/docs/flexible/nodejs/quickstart
-[readme]: ../README.md
-[contributing]: https://github.com/GoogleCloudPlatform/nodejs-docs-samples/blob/master/CONTRIBUTING.md
