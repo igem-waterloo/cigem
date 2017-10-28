@@ -8,6 +8,10 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+router.post('/', function(req, res, next) {
+  res.send('blah');
+});
+
 router.post('/setup', function(req, res, next) {
   if (!req.body.name || !req.body.repo) {
     res.send('Please include a \'name\' and \'repo\'');
