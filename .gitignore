@@ -61,4 +61,5 @@ typings/
 app.yaml
 
 # repos
+repoIndex.json
 repos/
