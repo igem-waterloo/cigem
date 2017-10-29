@@ -20,7 +20,7 @@ const makeDest = (type, source) => {
   return source
 }
 
-const uploadFromConf = (igemwiki, { conf, force }) => {
+const uploadFromConf = (cwd, igemwiki, { conf, force }) => {
   fs.readFile(conf, 'utf8')
     .then(string => yaml.safeLoad(string))
     // configuration is { templates: [...], pages: [...], stylesheets: [...], scripts: [...], images: [...] }
@@ -115,15 +115,23 @@ const uploadFromConf = (igemwiki, { conf, force }) => {
       ])
       .then(([ opts, jar ]) => opts.map(opt => Object.assign({}, opt, { jar })))
       .then(opts => Promise.map(opts, opt => igemwiki.upload(opt), { concurrency: 1 }))
-      .then(() => console.log('Upload completed'))
+      .then(() => {
+        console.log('Upload completed');
+        process.chdir(cwd);
+      })
     )
-    .catch(console.error)
+    .catch((err) => {
+      console.log(err);
+      process.chdir(repoDir);
+    })
 }
 
-const uploadConf = (teamName, conf) => {
+const uploadConf = (repoDir, teamName, conf) => {
   const year = (new Date()).getFullYear();
-  const igemwiki = require('igemwiki-api')({ year: year, teamName: teamName })
-  uploadFromConf(igemwiki, { conf });
+  const igemwiki = require('igemwiki-api')({ year: year, teamName: teamName });
+  const cwd = process.cwd();
+  process.chdir(repoDir);
+  uploadFromConf(cwd, igemwiki, { conf });
 }
 
 module.exports = uploadConf;
