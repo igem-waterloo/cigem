@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 var Git = require("nodegit");
 const upload = require('../util/upload-conf');
+var chdir = require('chdir');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -50,10 +51,11 @@ router.post('/', function(req, res, next) {
         return repository.mergeBranches("master", "origin/master");
       })
       .done(function() {
-        process.chdir(`./repos/${repoName}`);
-        upload(teamName, 'igemwiki-conf.yml')
-        res.send('Merged!');
-        return;
+        chdir(`./repos/${repoName}`, function () {
+          upload(teamName, 'igemwiki-conf.yml')
+          res.send('Merged!');
+          return;
+        });
       });
     }
   });

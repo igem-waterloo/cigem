@@ -223,6 +223,10 @@ character-parser@1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/character-parser/-/character-parser-1.2.1.tgz#c0dde4ab182713b919b970959a123ecc1a30fcd6"
 
+chdir@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.npmjs.org/chdir/-/chdir-0.0.0.tgz#c29bdb85f391834c83ddbf090f18a11b0ed96bee"
+
 cheerio@^0.22.0:
   version "0.22.0"
   resolved "https://registry.npmjs.org/cheerio/-/cheerio-0.22.0.tgz#a9baa860a3f9b595a6b81b1a86873121ed3a269e"
