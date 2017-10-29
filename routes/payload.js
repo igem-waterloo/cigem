@@ -9,7 +9,49 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  res.send('blah');
+  if (req.headers['x-github-event'] !== 'push') {
+    res.send('gotta be a push, man');
+    return;
+  }
+  var repoUrl = req.body.repository.html_url;
+  var repoName = repoUrl.split('/').slice(-2).join('/');
+  fs.readFile('./repoIndex.json', 'utf8', function readFileCallback(err, data) {
+    if (err) {
+      console.log(err);
+      res.send('Something went wrong :/');
+      return;
+    }
+    var repoIndex = JSON.parse(data); //now it an object
+    if (!repoIndex[repoUrl]) {
+      res.send('Repo isn\'t set up yet');
+      return;
+    } else {
+      Git.Repository.open(`./repos/${repoName}`)
+      .then(function(repo) {
+        repository = repo;
+
+        return repository.fetchAll({
+          callbacks: {
+            credentials: function(url, userName) {
+              return Git.Cred.sshKeyFromAgent(userName);
+            },
+            certificateCheck: function() {
+              return 1;
+            }
+          }
+        });
+      })
+      // Now that we're finished fetching, go ahead and merge our local branch
+      // with the new one
+      .then(function() {
+        return repository.mergeBranches("master", "origin/master");
+      })
+      .done(function() {
+        res.send('Merged!');
+        return;
+      });
+    }
+  });
 });
 
 router.post('/setup', function(req, res, next) {
@@ -21,8 +63,8 @@ router.post('/setup', function(req, res, next) {
     return;
   }
   var { repo, name } = req.body;
+  var repoName = repo.split('/').slice(-2).join('/');
   fs.readFile('./repoIndex.json', 'utf8', function readFileCallback(err, data) {
-    console.log(repo);
     if (err) {
       console.log(err);
       res.send('Something went wrong :/');
@@ -32,7 +74,7 @@ router.post('/setup', function(req, res, next) {
     if (repoIndex[repo]) {
       res.send('Already set up');
     } else {
-      Git.Clone(`${repo}`, "./repos")
+      Git.Clone(`${repo}`, `./repos/${repoName}`)
       .then(function () {
         repoIndex[repo] = name;
         var json = JSON.stringify(repoIndex);
