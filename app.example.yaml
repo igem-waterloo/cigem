@@ -2,5 +2,5 @@ env: flex
 runtime: custom
 
 env_variables:
-  username: user
-  password: pass
+  IGEM_USERNAME: user
+  IGEM_PASSWORD: pass
