@@ -4,3 +4,6 @@ runtime: custom
 env_variables:
   IGEM_USERNAME: user
   IGEM_PASSWORD: pass
+
+automatic_scaling:
+  max_num_instances: 1 
