@@ -20,7 +20,7 @@ router.post('/', function(req, res, next) {
   fs.readFile('./repoIndex.json', 'utf8', function readFileCallback(err, data) {
     if (err) {
       console.log(err);
-      res.send('Something went wrong :/');
+      res.send(`Couldn\'t find repoIndex in ${process.cwd()}`);
       return;
     }
     var repoIndex = JSON.parse(data); //now it an object
